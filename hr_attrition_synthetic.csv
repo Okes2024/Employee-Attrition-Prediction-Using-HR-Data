@@ -1,0 +1,151 @@
+SatisfactionLevel,YearsAtCompany,NumProjects,LastPerformanceScore,AvgMonthlyHours,Age,SalaryLevel,Department,Education,Attrition
+0.37,0,8,0.67,151,24,High,Finance,Master,0
+0.95,0,3,0.75,178,25,Low,Finance,PhD,0
+0.73,18,7,0.79,129,45,Low,R&D,Bachelor,0
+0.6,1,2,0.79,205,23,High,R&D,PhD,0
+0.16,11,2,0.09,150,38,Medium,HR,PhD,1
+0.16,5,7,0.49,180,39,Low,HR,Master,1
+0.06,3,6,0.06,232,52,High,Sales,PhD,0
+0.87,10,3,0.55,128,39,Medium,R&D,Master,0
+0.6,16,9,0.44,231,31,Low,IT,High School,1
+0.71,5,6,0.89,237,20,Medium,R&D,High School,1
+0.02,4,6,0.35,244,45,High,IT,Master,0
+0.97,19,1,0.12,173,33,Low,Finance,High School,0
+0.83,1,4,0.14,116,57,Medium,R&D,Bachelor,0
+0.21,5,6,0.76,183,56,Low,Finance,PhD,1
+0.18,10,6,0.62,168,30,Medium,HR,Bachelor,0
+0.18,15,5,0.1,133,55,High,HR,PhD,1
+0.3,15,1,0.08,105,32,High,Sales,High School,0
+0.52,0,8,0.7,152,22,Low,R&D,Bachelor,0
+0.43,8,5,0.07,225,52,Medium,Finance,High School,0
+0.29,5,5,0.82,142,25,Low,IT,PhD,0
+0.61,15,7,0.71,214,29,Low,HR,Master,0
+0.14,2,4,0.08,210,24,Medium,HR,Master,0
+0.29,19,6,0.08,179,42,Medium,IT,Bachelor,0
+0.37,3,4,0.99,194,29,Medium,Finance,High School,1
+0.46,18,3,0.37,217,21,High,Finance,High School,0
+0.79,2,7,0.37,243,32,Low,R&D,Bachelor,0
+0.2,18,8,0.81,107,59,Low,R&D,Master,1
+0.51,19,4,0.95,231,21,High,Sales,PhD,1
+0.59,6,2,0.99,203,39,Medium,HR,Bachelor,1
+0.05,19,3,0.75,231,20,High,R&D,PhD,1
+0.61,8,1,0.38,124,56,High,Finance,Master,0
+0.17,0,8,0.08,195,28,High,IT,High School,0
+0.07,7,3,0.78,192,36,Low,Finance,Master,1
+0.95,6,7,0.56,160,28,High,HR,Bachelor,0
+0.97,17,5,0.42,221,30,Low,Finance,High School,0
+0.81,7,5,0.91,150,34,Low,Sales,Bachelor,1
+0.3,0,7,0.11,246,43,Low,HR,Bachelor,0
+0.1,10,9,0.49,120,57,Medium,IT,Master,0
+0.68,17,5,0.01,104,54,Low,Sales,Bachelor,0
+0.44,9,1,0.47,191,49,Low,HR,Master,0
+0.12,2,1,0.06,160,50,Medium,IT,High School,0
+0.5,6,2,0.12,121,24,Low,Sales,Master,0
+0.03,15,6,0.12,248,33,High,Sales,High School,1
+0.91,15,9,0.65,169,30,High,HR,Master,0
+0.26,19,8,0.75,100,28,Low,R&D,PhD,0
+0.66,16,5,0.58,232,53,Medium,Sales,PhD,1
+0.31,1,1,0.96,111,31,High,Sales,Bachelor,1
+0.52,0,7,0.37,189,54,Medium,IT,Master,1
+0.55,15,5,0.29,145,54,Medium,Finance,Master,1
+0.18,11,6,0.87,133,20,High,HR,High School,0
+0.97,4,7,0.22,177,59,Medium,HR,Bachelor,0
+0.78,4,3,0.96,144,41,High,R&D,Master,0
+0.94,8,3,0.01,172,48,Medium,R&D,Bachelor,0
+0.89,8,5,0.97,125,27,High,HR,PhD,0
+0.6,2,6,0.04,146,30,Low,R&D,Master,0
+0.92,18,9,0.89,220,56,High,IT,Master,1
+0.09,15,5,0.53,155,33,High,HR,Bachelor,0
+0.2,15,1,0.99,193,49,High,R&D,Master,0
+0.05,2,4,0.07,206,54,High,HR,Bachelor,0
+0.33,19,5,0.55,162,40,Medium,Finance,Master,0
+0.39,0,5,0.97,147,56,Low,Sales,High School,0
+0.27,19,7,0.52,160,24,High,HR,Bachelor,1
+0.83,10,4,0.63,180,38,Medium,Sales,Master,0
+0.36,16,1,0.7,125,33,Low,R&D,PhD,0
+0.28,7,5,0.45,135,45,Low,Sales,Master,0
+0.54,3,7,0.63,100,23,Low,HR,PhD,1
+0.14,5,6,0.58,107,44,Low,Finance,PhD,0
+0.8,7,5,0.9,212,44,High,R&D,High School,0
+0.07,19,4,0.05,198,37,High,HR,Bachelor,0
+0.99,2,2,0.28,146,59,Medium,R&D,Master,0
+0.77,15,4,0.95,226,27,Medium,IT,High School,1
+0.2,2,3,0.89,155,58,Medium,Sales,Master,1
+0.01,17,1,0.46,113,59,Low,IT,PhD,0
+0.82,13,8,0.62,127,33,Low,HR,Bachelor,1
+0.71,17,5,0.28,177,51,High,Finance,Master,1
+0.73,1,4,0.19,229,57,Low,R&D,Master,1
+0.77,2,8,0.46,208,52,Low,Sales,PhD,1
+0.07,15,7,0.35,113,42,Low,R&D,Master,0
+0.36,8,2,0.58,155,34,Medium,HR,Master,0
+0.12,3,1,0.08,214,52,Medium,R&D,PhD,0
+0.86,0,4,0.97,106,44,High,Sales,High School,1
+0.62,3,8,0.99,102,36,Low,HR,PhD,0
+0.33,0,2,0.7,210,52,Low,R&D,High School,1
+0.06,13,3,0.54,206,21,High,Finance,Bachelor,1
+0.31,15,1,0.31,117,33,Low,HR,High School,0
+0.33,19,1,0.81,137,59,Low,HR,High School,1
+0.73,7,3,0.68,214,59,Medium,Finance,Bachelor,0
+0.64,6,5,0.16,114,58,High,IT,High School,0
+0.89,2,3,0.91,218,25,High,Sales,PhD,1
+0.47,16,1,0.82,127,25,High,IT,High School,0
+0.12,0,1,0.95,138,22,High,R&D,Bachelor,1
+0.71,15,8,0.73,116,26,Medium,Finance,PhD,1
+0.76,11,2,0.61,185,27,Medium,IT,Bachelor,0
+0.56,18,3,0.42,225,34,Low,HR,Bachelor,0
+0.77,13,2,0.93,143,48,Low,R&D,Master,0
+0.49,5,3,0.87,124,52,Low,R&D,Master,0
+0.52,5,7,0.05,244,49,Low,IT,Bachelor,1
+0.43,12,1,0.03,112,58,Medium,IT,Bachelor,0
+0.03,18,8,0.38,124,46,High,Finance,Bachelor,0
+0.11,7,2,0.81,167,55,Medium,Sales,Master,0
+0.03,1,3,0.99,237,48,Low,IT,Master,0
+0.64,0,9,0.15,166,57,Medium,IT,High School,1
+0.31,14,7,0.59,208,52,High,HR,High School,0
+0.51,0,4,0.38,245,56,High,R&D,Bachelor,1
+0.91,4,5,0.97,210,46,Medium,Sales,PhD,0
+0.25,15,2,0.84,210,52,Medium,HR,PhD,1
+0.41,18,8,0.84,133,23,Medium,Finance,Master,0
+0.76,3,4,0.47,210,41,Low,Finance,Master,0
+0.23,2,9,0.41,107,21,Medium,IT,Master,1
+0.08,16,5,0.27,212,29,Medium,IT,Bachelor,0
+0.29,16,9,0.06,182,24,Medium,Finance,PhD,1
+0.16,11,4,0.86,141,29,High,IT,High School,0
+0.93,13,5,0.81,200,52,High,Sales,Bachelor,0
+0.81,5,9,1.0,105,57,Low,IT,High School,0
+0.63,2,8,1.0,125,32,Low,R&D,High School,1
+0.87,8,3,0.56,163,50,High,IT,Bachelor,0
+0.8,4,1,0.77,158,55,High,HR,High School,0
+0.19,16,3,0.94,208,43,High,Sales,PhD,0
+0.89,13,4,0.85,220,34,Medium,HR,High School,0
+0.54,2,2,0.25,132,48,Medium,HR,PhD,0
+0.81,0,1,0.45,249,27,High,R&D,PhD,1
+0.9,19,7,0.13,120,24,Medium,Sales,PhD,1
+0.32,0,8,0.95,169,48,Medium,Sales,Master,1
+0.11,2,7,0.61,211,23,Low,Sales,High School,1
+0.23,17,5,0.23,103,31,High,Sales,Bachelor,0
+0.43,9,1,0.67,193,21,High,Sales,Bachelor,1
+0.82,2,7,0.62,174,46,Medium,R&D,High School,0
+0.86,7,7,0.36,161,50,High,IT,Master,0
+0.01,13,9,0.11,193,55,Low,HR,Master,0
+0.51,17,3,0.67,194,55,Low,Sales,PhD,0
+0.42,14,9,0.52,154,45,Low,IT,High School,1
+0.22,1,1,0.77,236,46,High,IT,High School,0
+0.12,9,1,0.52,230,24,High,HR,Bachelor,0
+0.34,1,4,0.85,130,39,High,R&D,High School,0
+0.94,16,9,0.55,139,30,High,Finance,Master,1
+0.32,7,6,0.56,135,29,High,Finance,High School,0
+0.52,0,3,0.88,105,59,Low,IT,Bachelor,0
+0.7,8,1,0.4,165,57,Medium,HR,PhD,0
+0.36,10,4,0.13,174,25,Low,Finance,Bachelor,1
+0.97,15,9,0.03,103,27,High,IT,Bachelor,0
+0.96,6,3,0.76,178,42,Low,R&D,PhD,0
+0.25,9,9,0.62,233,45,High,Finance,Bachelor,0
+0.5,2,7,0.7,217,31,High,IT,Bachelor,0
+0.3,17,4,0.21,212,45,Low,IT,High School,0
+0.28,12,3,0.14,193,32,High,Sales,High School,0
+0.04,6,5,0.01,161,59,Medium,R&D,PhD,1
+0.61,3,5,0.35,178,37,High,Sales,High School,0
+0.5,12,3,0.59,235,44,Medium,HR,High School,0
+0.05,19,9,0.39,125,52,Medium,Sales,Bachelor,1
+0.28,0,4,0.44,143,59,High,Sales,Master,0
