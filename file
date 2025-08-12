@@ -1,0 +1,257 @@
+"""
+Employee-Attrition-Prediction-Using-HR-Data (synthetic dataset)
+Generates >100 synthetic employee records, saves CSV, trains models and evaluates.
+
+Requirements:
+    pip install pandas numpy scikit-learn matplotlib seaborn
+"""
+
+import random
+import numpy as np
+import pandas as pd
+from pathlib import Path
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import (
+    accuracy_score, classification_report, confusion_matrix, roc_auc_score, roc_curve
+)
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# ---------- Settings ----------
+RANDOM_SEED = 42
+NUM_SAMPLES = 1200  # >100 as requested
+OUTPUT_CSV = "employee_attrition_synthetic.csv"
+np.random.seed(RANDOM_SEED)
+random.seed(RANDOM_SEED)
+
+# ---------- Synthetic data templates ----------
+departments = ["Sales", "Research & Development", "Human Resources"]
+job_roles = [
+    "Sales Executive", "Research Scientist", "Laboratory Technician", "Manufacturing Director",
+    "Healthcare Representative", "Manager", "Sales Representative", "Human Resources"
+]
+education_levels = [1, 2, 3, 4, 5]  # 1:Below College ... 5:Doctor
+marital_statuses = ["Single", "Married", "Divorced"]
+business_travel = ["Non-Travel", "Travel_Rarely", "Travel_Frequently"]
+genders = ["Male", "Female"]
+overtime_vals = ["Yes", "No"]
+performance_ratings = [1, 2, 3, 4]  # 3-4 typical higher
+
+# ---------- Helper to sample continuous features ----------
+def skewed_salary(base=3000, role_factor=1.0):
+    # base mean + random + role multiplier
+    return max(1000, int(np.random.normal(loc=base * role_factor, scale=base * 0.5)))
+
+# ---------- Generate records ----------
+rows = []
+for i in range(NUM_SAMPLES):
+    age = int(np.clip(np.random.normal(35, 9), 18, 65))
+    gender = random.choice(genders)
+    dept = random.choice(departments)
+    role = random.choice(job_roles)
+    education = random.choice(education_levels)
+    distance = int(np.clip(np.random.exponential(scale=6), 1, 60))  # km
+    years_at_company = int(np.clip(np.random.poisson(lam=3), 0, 40))
+    years_in_role = int(np.clip(np.random.poisson(lam=2), 0, max(0, years_at_company)))
+    num_companies_worked = int(np.clip(np.random.poisson(lam=1.5), 0, 10))
+    training_times_last_year = int(np.clip(np.random.poisson(lam=2), 0, 10))
+    job_satisfaction = int(np.clip(np.random.choice([1,2,3,4], p=[0.15,0.25,0.4,0.2])), 1, 4)
+    environment_satisfaction = int(np.clip(np.random.choice([1,2,3,4], p=[0.15,0.25,0.45,0.15])),1,4)
+    work_life_balance = int(np.clip(np.random.choice([1,2,3,4], p=[0.1,0.3,0.45,0.15])),1,4)
+    stock_option_level = int(np.clip(np.random.choice([0,1,2,3], p=[0.6,0.2,0.15,0.05])),0,3)
+    monthly_income = skewed_salary(base=2500, role_factor=1.0 + (job_satisfaction-2)*0.1 + (performance_ratings:=random.choice(performance_ratings)-3)*0.05)
+    overtime = random.choices(overtime_vals, weights=[0.25,0.75])[0]  # most no overtime
+    performance_rating = random.choices([3,4], weights=[0.8,0.2])[0]
+    business_travel_type = random.choices(business_travel, weights=[0.7,0.25,0.05])[0]
+    marital_status = random.choice(marital_statuses)
+    # derive attrition probability from risk factors:
+    # higher risk: low job satisfaction, low environment satisfaction, overtime=yes, fewer years at company but many job changes, low income relative to age
+    risk = 0.02
+    risk += (3 - job_satisfaction) * 0.08  # low satisfaction increases risk
+    risk += (3 - environment_satisfaction) * 0.04
+    risk += 0.12 if overtime == "Yes" else 0.0
+    risk += 0.05 if training_times_last_year == 0 else -0.02
+    risk += 0.03 * min(num_companies_worked, 5)
+    if years_at_company >= 8:
+        risk -= 0.06
+    if monthly_income < 2000:
+        risk += 0.08
+    # randomness
+    risk = np.clip(risk + np.random.normal(0, 0.03), 0.01, 0.9)
+    attrition = np.random.rand() < risk
+
+    rows.append({
+        "EmployeeID": f"EMP{100000+i}",
+        "Age": age,
+        "Gender": gender,
+        "Department": dept,
+        "JobRole": role,
+        "Education": education,
+        "DistanceFromHome": distance,
+        "YearsAtCompany": years_at_company,
+        "YearsInCurrentRole": years_in_role,
+        "NumCompaniesWorked": num_companies_worked,
+        "TrainingTimesLastYear": training_times_last_year,
+        "JobSatisfaction": job_satisfaction,
+        "EnvironmentSatisfaction": environment_satisfaction,
+        "WorkLifeBalance": work_life_balance,
+        "StockOptionLevel": stock_option_level,
+        "MonthlyIncome": monthly_income,
+        "OverTime": overtime,
+        "PerformanceRating": performance_rating,
+        "BusinessTravel": business_travel_type,
+        "MaritalStatus": marital_status,
+        "Attrition": "Yes" if attrition else "No"
+    })
+
+df = pd.DataFrame(rows)
+
+# Save CSV
+df.to_csv(OUTPUT_CSV, index=False)
+print(f"Saved synthetic dataset to: {Path(OUTPUT_CSV).resolve()}")
+print("Dataset shape:", df.shape)
+print(df["Attrition"].value_counts(normalize=True))
+
+# ---------- Modeling ----------
+# Prepare features & target
+X = df.drop(columns=["EmployeeID", "Attrition"])
+y = (df["Attrition"] == "Yes").astype(int)
+
+# Define preprocessing: categorical vs numeric
+numeric_features = [
+    "Age", "Education", "DistanceFromHome", "YearsAtCompany", "YearsInCurrentRole",
+    "NumCompaniesWorked", "TrainingTimesLastYear", "JobSatisfaction", "EnvironmentSatisfaction",
+    "WorkLifeBalance", "StockOptionLevel", "MonthlyIncome", "PerformanceRating"
+]
+categorical_features = ["Gender", "Department", "JobRole", "OverTime", "BusinessTravel", "MaritalStatus"]
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ("num", StandardScaler(), numeric_features),
+        ("cat", OneHotEncoder(handle_unknown="ignore", sparse=False), categorical_features)
+    ],
+    remainder="drop"
+)
+
+# Train/test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, stratify=y, random_state=RANDOM_SEED
+)
+
+# Pipelines for models
+logreg_pipeline = Pipeline([
+    ("prep", preprocessor),
+    ("clf", LogisticRegression(max_iter=1000, random_state=RANDOM_SEED))
+])
+
+rf_pipeline = Pipeline([
+    ("prep", preprocessor),
+    ("clf", RandomForestClassifier(n_estimators=200, random_state=RANDOM_SEED, n_jobs=-1))
+])
+
+# Fit Logistic Regression
+print("\nTraining Logistic Regression...")
+logreg_pipeline.fit(X_train, y_train)
+y_pred_lr = logreg_pipeline.predict(X_test)
+y_prob_lr = logreg_pipeline.predict_proba(X_test)[:, 1]
+
+# Fit Random Forest
+print("Training Random Forest...")
+rf_pipeline.fit(X_train, y_train)
+y_pred_rf = rf_pipeline.predict(X_test)
+y_prob_rf = rf_pipeline.predict_proba(X_test)[:, 1]
+
+# ---------- Evaluation ----------
+def evaluate_model(name, y_true, y_pred, y_prob):
+    print(f"\n=== {name} Evaluation ===")
+    print("Accuracy:", accuracy_score(y_true, y_pred))
+    try:
+        print("ROC AUC:", roc_auc_score(y_true, y_prob))
+    except Exception as e:
+        print("ROC AUC: could not compute:", e)
+    print("\nClassification Report:")
+    print(classification_report(y_true, y_pred, target_names=["No Attrition", "Attrition"]))
+    cm = confusion_matrix(y_true, y_pred)
+    print("Confusion Matrix:\n", cm)
+    return cm
+
+cm_lr = evaluate_model("Logistic Regression", y_test, y_pred_lr, y_prob_lr)
+cm_rf = evaluate_model("Random Forest", y_test, y_pred_rf, y_prob_rf)
+
+# ---------- ROC Curve ----------
+plt.figure(figsize=(8,6))
+fpr_lr, tpr_lr, _ = roc_curve(y_test, y_prob_lr)
+fpr_rf, tpr_rf, _ = roc_curve(y_test, y_prob_rf)
+plt.plot(fpr_lr, tpr_lr, label="Logistic Regression")
+plt.plot(fpr_rf, tpr_rf, label="Random Forest")
+plt.plot([0,1],[0,1], "--", color="grey")
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.title("ROC Curve")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# ---------- Confusion Matrix Heatmaps ----------
+fig, axes = plt.subplots(1, 2, figsize=(12,5))
+sns.heatmap(cm_lr, annot=True, fmt="d", ax=axes[0], cmap="Blues", cbar=False)
+axes[0].set_title("Logistic Regression")
+axes[0].set_xlabel("Predicted")
+axes[0].set_ylabel("Actual")
+sns.heatmap(cm_rf, annot=True, fmt="d", ax=axes[1], cmap="Greens", cbar=False)
+axes[1].set_title("Random Forest")
+axes[1].set_xlabel("Predicted")
+axes[1].set_ylabel("Actual")
+plt.tight_layout()
+plt.show()
+
+# ---------- Feature importance (Random Forest) ----------
+# Extract feature names after preprocessing
+ohe = rf_pipeline.named_steps["prep"].named_transformers_["cat"]
+ohe_cols = list(ohe.get_feature_names_out(categorical_features))
+feature_names = numeric_features + ohe_cols
+importances = rf_pipeline.named_steps["clf"].feature_importances_
+feat_imp = pd.Series(importances, index=feature_names).sort_values(ascending=False).head(15)
+print("\nTop 15 feature importances (Random Forest):")
+print(feat_imp)
+
+plt.figure(figsize=(8,5))
+sns.barplot(x=feat_imp.values, y=feat_imp.index)
+plt.title("Top 15 Feature Importances (Random Forest)")
+plt.xlabel("Importance")
+plt.tight_layout()
+plt.show()
+
+# ---------- Example predictions ----------
+examples = pd.DataFrame([
+    {
+        "Age": 28, "Gender": "Female", "Department": "Sales", "JobRole": "Sales Representative",
+        "Education": 3, "DistanceFromHome": 10, "YearsAtCompany": 1, "YearsInCurrentRole": 1,
+        "NumCompaniesWorked": 3, "TrainingTimesLastYear": 0, "JobSatisfaction": 1,
+        "EnvironmentSatisfaction": 1, "WorkLifeBalance": 1, "StockOptionLevel": 0,
+        "MonthlyIncome": 1800, "OverTime": "Yes", "PerformanceRating": 3,
+        "BusinessTravel": "Travel_Rarely", "MaritalStatus": "Single"
+    },
+    {
+        "Age": 42, "Gender": "Male", "Department": "Research & Development", "JobRole": "Research Scientist",
+        "Education": 4, "DistanceFromHome": 7, "YearsAtCompany": 10, "YearsInCurrentRole": 5,
+        "NumCompaniesWorked": 1, "TrainingTimesLastYear": 3, "JobSatisfaction": 4,
+        "EnvironmentSatisfaction": 4, "WorkLifeBalance": 3, "StockOptionLevel": 1,
+        "MonthlyIncome": 7000, "OverTime": "No", "PerformanceRating": 4,
+        "BusinessTravel": "Non-Travel", "MaritalStatus": "Married"
+    }
+])
+print("\nExample predictions (Random Forest):")
+preds = rf_pipeline.predict(examples)
+probs = rf_pipeline.predict_proba(examples)[:,1]
+for i, row in examples.reset_index(drop=True).iterrows():
+    print(f"- Example {i+1}: Predicted Attrition = {'Yes' if preds[i]==1 else 'No'} (prob={probs[i]:.2f})")
+
+print("\nDone.")
